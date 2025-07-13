@@ -1,6 +1,8 @@
 ## How to start
 
 python3 generate_brand_csv.py
+
+
 python3 generate_user_csv.py
 
 ## How to run
