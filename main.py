@@ -15,20 +15,39 @@ app = FastAPI()
 def home():
     return {"message": "Brand Recommendation API is running."}
 
+
 @app.get("/recommend/{user_id}")
 def get_recommendations(
     user_id: str,
     n: int = 5,
-    k: int = 9,
+    k: int = 10,
     alpha: float = 0.7,
     min_similarity: float = 0.05
 ):
-    results = recommend_hybrid_for_user(
+    # Check and extract user profile
+    user_row = users[users['user_id'] == user_id]
+    if user_row.empty:
+        return {"error": f"User '{user_id}' not found"}
+
+    user_profile = user_row.iloc[0][[
+        'preferred_categories',
+        'preferred_price_range',
+        'preferred_gender_fit',
+        'sustainability_focused'
+    ]].to_dict()
+
+    # Get recommendations
+    recommendations = recommend_hybrid_for_user(
         user_id=user_id,
         k=k,
         n_recommendations=n,
         alpha=alpha,
         min_similarity=min_similarity
     )
-    return {"user_id": user_id, "recommendations": results}
+
+    return {
+        "user_id": user_id,
+        "user_profile": user_profile,
+        "recommendations": recommendations
+    }
 
