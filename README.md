@@ -1,3 +1,6 @@
+## Dependencies
+`fastapi` `pandas` `scikit-learn` `uvicorn` `scipy` `numpy`
+
 ## How to start
 
 python3 generate_brand_csv.py
